@@ -1,45 +1,29 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -O2
-LDFLAGS = -lcrypto
+CC      = gcc
+CFLAGS  = -Wall -Wextra -g -std=c11 -D_POSIX_C_SOURCE=200809L -Wno-deprecated-declarations
+LDFLAGS = -lssl -lcrypto
 
-# ─── Main binary ─────────────────────────────────────────────────────────────
+SRC     = object.c tree.c index.c commit.c
+OBJ     = $(SRC:.c=.o)
 
-SRCS = object.c tree.c index.c commit.c pes.c
-OBJS = $(SRCS:.c=.o)
-
-pes: $(OBJS)
-	$(CC) -o $@ $^ $(LDFLAGS)
-
-%.o: %.c pes.h
-	$(CC) $(CFLAGS) -c $< -o $@
-
-# ─── Test binaries ───────────────────────────────────────────────────────────
-
-test_objects: test_objects.o object.o
-	$(CC) -o $@ $^ $(LDFLAGS)
-
-test_tree: test_tree.o object.o tree.o
-	$(CC) -o $@ $^ $(LDFLAGS)
-
-# ─── Convenience targets ────────────────────────────────────────────────────
-
-.PHONY: all clean test test-unit test-integration
+.PHONY: all clean test-integration
 
 all: pes test_objects test_tree
 
-clean:
-	rm -f pes test_objects test_tree $(OBJS) test_objects.o test_tree.o
-	rm -rf .pes
+pes: pes.c $(OBJ)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-test: test-unit test-integration
+test_objects: test_objects.c object.c
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
 
-test-unit: test_objects test_tree
-	@echo "=== Running Phase 1 tests ==="
-	./test_objects
-	@echo ""
-	@echo "=== Running Phase 2 tests ==="
-	./test_tree
+test_tree: test_tree.c object.c tree.c index.c
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 test-integration: pes
-	@echo "=== Running integration tests ==="
 	bash test_sequence.sh
+
+clean:
+	rm -f pes test_objects test_tree *.o
+	rm -rf .pes
