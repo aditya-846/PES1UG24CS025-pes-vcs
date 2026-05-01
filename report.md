@@ -111,3 +111,45 @@ If you already switched away, you would need to find the commit hash from the ob
 
 *(Insert screenshots 1A, 1B, 2A, 2B, 3A, 3B, 4A, 4B, 4C, and Final here)*
 
+
+## Screenshots
+
+### Phase 1 - Object Store
+
+**1A - test_objects output:**
+![1A](screenshots/1A_test_objects.png)
+
+**1B - Object store sharded directory:**
+![1B](screenshots/1B_find_objects.png)
+
+### Phase 2 - Tree Objects
+
+**2A - test_tree output:**
+![2A](screenshots/2A_test_tree.png)
+
+**2B - Raw binary tree object:**
+![2B](screenshots/2B_xxd_tree.png)
+
+### Phase 3 - Index/Staging Area
+
+**3A - init, add, status sequence:**
+![3A](screenshots/3A_add_status.png)
+
+**3B - cat .pes/index:**
+![3B](screenshots/3B_cat_index.png)
+
+### Phase 4 - Commits and History
+
+**4A - pes log with three commits:**
+![4A](screenshots/4A_log.png)
+
+**4B - Object store growth:**
+![4B](screenshots/4B_find_all.png)
+
+**4C - Reference chain:**
+![4C](screenshots/4C_refs_head.png)
+
+### Final - Integration Test
+
+**All integration tests passing:**
+![Final](screenshots/Final_integration.png)
